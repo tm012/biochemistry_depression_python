@@ -1,0 +1,312 @@
+---
+title: "final_project_adv_1"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(Hmisc)
+library(tidyr)
+library(corrplot)
+library(BayesFactor)
+library (BSDA)
+library(MASS)
+library(agricolae)
+```
+
+
+#Standard Biochemistry Profile
+#https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Laboratory&CycleBeginYear=2017
+#https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/DPQ_J.htm
+#https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/BIOPRO_J.htm
+#https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/MCQ_J.htm
+#https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/HUQ_J.htm
+
+The Data that is used for the project is taken from National Health and Nutrition Examination Survey's (NHANES) 2017-2018 Laboratory Data (Standard Biochemistry Profile) and Questionnaire Data (Mental Health - Depression Screener & Medical Conditions).
+###2017-18
+
+```{r}
+
+
+bio_chem_full <- sasxport.get("BIOPRO_J_2017_18.XPT")
+mental_health_data_1 <- mental_health_data <- sasxport.get("DPQ_J_2017_18.XPT")
+hospital_utilization <- sasxport.get("HUQ_J_2017_18.XPT")
+
+bio_chem_2017_18 <- merge(bio_chem_full, mental_health_data)
+
+
+##combined data set, subsets of this data set will be use in this project to different type of statistical analysis 
+bio_chem_2017_18 <- merge(bio_chem_2017_18, hospital_utilization)
+
+bio_chem_2017_18<- bio_chem_2017_18[,c("lbxsatsi", "lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq010","dpq020","dpq030","dpq040","dpq050","dpq060","dpq070","dpq090","huq090")]
+
+
+
+```
+
+###2015-16
+
+```{r}
+
+
+bio_chem_full <- sasxport.get("BIOPRO_J_2015_16.XPT")
+mental_health_data_2 <- mental_health_data <- sasxport.get("DPQ_J_2015_16.XPT")
+hospital_utilization <- sasxport.get("HUQ_J_2015_16.XPT")
+
+bio_chem_2015_16 <- merge(bio_chem_full, mental_health_data)
+
+
+##combined data set, subsets of this data set will be use in this project to different type of statistical analysis 
+bio_chem_2015_16 <- merge(bio_chem_2015_16, hospital_utilization)
+
+bio_chem_2015_16<- bio_chem_2015_16[,c("lbxsatsi",  "lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq010","dpq020","dpq030","dpq040","dpq050","dpq060","dpq070","dpq090","huq090")]
+
+```
+###2013-14
+
+```{r}
+
+
+bio_chem_full <- sasxport.get("BIOPRO_J_2013_14.XPT")
+mental_health_data_3 <- mental_health_data <- sasxport.get("DPQ_J_2013_14.XPT")
+hospital_utilization <- sasxport.get("HUQ_J_2013_14.XPT")
+
+bio_chem_2013_14 <- merge(bio_chem_full, mental_health_data)
+
+
+##combined data set, subsets of this data set will be use in this project to different type of statistical analysis 
+bio_chem_2013_14 <- merge(bio_chem_2013_14, hospital_utilization)
+
+bio_chem_2013_14<- bio_chem_2013_14[,c("lbxsatsi", "lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq010","dpq020","dpq030","dpq040","dpq050","dpq060","dpq070","dpq090","huq090")]
+
+```
+###2011-12
+
+```{r}
+
+
+bio_chem_full <- sasxport.get("BIOPRO_J_2011_12.XPT")
+mental_health_data_4 <- mental_health_data <- sasxport.get("DPQ_J_2011_12.XPT")
+hospital_utilization <- sasxport.get("HUQ_J_2011_12.XPT")
+
+bio_chem_2011_12 <- merge(bio_chem_full, mental_health_data)
+
+
+##combined data set, subsets of this data set will be use in this project to different type of statistical analysis 
+bio_chem_2011_12 <- merge(bio_chem_2011_12, hospital_utilization)
+
+
+bio_chem_2011_12<- bio_chem_2011_12[,c("lbxsatsi",  "lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq010","dpq020","dpq030","dpq040","dpq050","dpq060","dpq070","dpq090","huq090")]
+```
+
+
+
+
+```{r}
+bio_chem <- rbind(bio_chem_2017_18,bio_chem_2015_16)
+bio_chem <- rbind(bio_chem,bio_chem_2013_14)
+bio_chem <- rbind(bio_chem,bio_chem_2011_12)
+
+bio_chem <- bio_chem %>% drop_na()
+
+
+#yes hospital
+#minor
+nrow(subset(bio_chem, (huq090 == 1 & dpq020 == 1 )))
+nrow(subset(bio_chem, (dpq020 == 1 )))
+#major
+nrow(subset(bio_chem, (huq090 == 1 & (dpq020 == 2)| (dpq020 == 3) )))
+
+nrow(subset(bio_chem, (dpq020 == 2)| (dpq020 == 3) ))
+
+
+
+#missing
+
+
+# nrow(subset(bio_chem,  (dpq020 == 7)| (dpq020 == 9)| (dpq020 == ".") ))
+
+```
+
+
+The BIOPRO_J dataset has 41 variables initially. After removing all refrigerated serums and keeping only one type of measurement for a type of variable, I get 18 variables that represents body chemicals. I also added variables from mental health data (DPQ_J) that asks about 'Have little interest in doing things'(dpq010), 'Feeling down, depressed, or hopeless'(dpq020), and 'Trouble sleeping or sleeping too much' (dpq030). Also, rows that have NA values are dropped.
+
+```{r}
+
+bio_chem_trimmed<- bio_chem[,c("lbxsatsi","lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq010","dpq020","dpq030","dpq040","dpq050","dpq060","dpq070","dpq090","huq090")]
+bio_chem_trimmed <- bio_chem_trimmed %>% drop_na()
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq010 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq010 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq010 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq020 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq020 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq020 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq030 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq030 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq030 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq040 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq040 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq040 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq050 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq050 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq050 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq060 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq060 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq060 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq070 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq070 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq070 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq090 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq090 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, dpq090 != "9")
+
+bio_chem_trimmed <- subset(bio_chem_trimmed, huq090 != ".")
+bio_chem_trimmed <- subset(bio_chem_trimmed, huq090 != "7")
+bio_chem_trimmed <- subset(bio_chem_trimmed, huq090 != "9")
+
+bio_chem_trimmed$dpq010[bio_chem_trimmed$dpq010 != 0] <- 1
+bio_chem_trimmed$dpq030[bio_chem_trimmed$dpq030 != 0] <- 1
+bio_chem_trimmed$dpq040[bio_chem_trimmed$dpq040 != 0] <- 1
+bio_chem_trimmed$dpq050[bio_chem_trimmed$dpq050 != 0] <- 1
+bio_chem_trimmed$dpq060[bio_chem_trimmed$dpq060 != 0] <- 1
+bio_chem_trimmed$dpq070[bio_chem_trimmed$dpq070 != 0] <- 1
+bio_chem_trimmed$dpq090[bio_chem_trimmed$dpq090 != 0] <- 1
+
+
+
+bio_chem_trimmed$huq090[bio_chem_trimmed$huq090 == 2] <- 0
+
+bio_chem_trimmed <- bio_chem_trimmed %>% drop_na()
+head(bio_chem_trimmed)
+ 
+  #,"dpq010","dpq020","dpq030","dpq040","dpq050","dpq060","dpq070","dpq080","dpq090","dpq100"
+```
+
+```{r}
+# model_dpq020 <- lm( dpq020 ~ 0+lbxsatsi+lbxsapsi+lbxsassi+lbxsc3si+lbxsbu+lbxsclsi+lbxsck+lbxsgb+lbxsgtsi+lbxsldsi+lbxsossi+lbxsph+lbxsksi+lbxsnasi+lbxstb+lbxsca+lbxstp+lbxsua+dpq010+dpq030+dpq040+dpq050+dpq060+dpq070+dpq090+huq090,data=bio_chem_trimmed)
+# summary(model_dpq020)
+# stepAIC(model_dpq020, direction='both', k = log(nrow(bio_chem_trimmed)))
+
+```
+
+```{r}
+bio_chem_trimmed_all <- bio_chem_trimmed
+
+
+
+
+
+bio_chem_trimmed_all$dpq020[bio_chem_trimmed_all$dpq020 != 0] <- 1
+
+bio_chem_trimmed_all <- bio_chem_trimmed_all[c("lbxsatsi", "lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq020")]
+
+
+head(bio_chem_trimmed_all)
+
+
+write.csv(bio_chem_trimmed_all,"bio_chem_trimmed_chem_mental.csv")
+
+```
+
+```{r}
+library(synthpop)
+nrow(subset(bio_chem_trimmed_all, dpq020 == "1"))
+nrow(subset(bio_chem_trimmed_all, dpq020 == "0"))
+df_pos <- subset(bio_chem_trimmed_all, dpq020 == "1")
+h_dat <- syn(df_pos, k = 9900, method = "parametric", seed = 1)
+write.syn(h_dat,file = "df_train_pos_syn.csv", filetype = "csv")
+
+
+#synthtic data will be added manually in every case
+
+```
+```{r}
+df_train_pos_syn <- read.csv("bio_chem_trimmed_chem_mental_synthetic.csv", header=TRUE) 
+#df_train_pos_syn <- df_train_pos_syn[-1]
+#bio_chem_trimmed_all <-df_train_pos_syn
+```
+
+##minor
+
+
+
+```{r}
+bio_chem_trimmed_normal <- bio_chem_trimmed
+bio_chem_trimmed_normal <- subset(bio_chem_trimmed_normal, dpq020 != ".")
+bio_chem_trimmed_normal <- subset(bio_chem_trimmed_normal, dpq020 != "7")
+bio_chem_trimmed_normal <- subset(bio_chem_trimmed_normal, dpq020 != "9")
+bio_chem_trimmed_normal <- subset(bio_chem_trimmed_normal, dpq020 != "2")
+bio_chem_trimmed_normal <- subset(bio_chem_trimmed_normal, dpq020 != "3")
+
+bio_chem_trimmed_normal$dpq020[bio_chem_trimmed_normal$dpq020 != 0] <- 1
+
+
+bio_chem_trimmed_normal <- bio_chem_trimmed_normal %>% drop_na()
+head(bio_chem_trimmed_normal)
+
+bio_chem_trimmed_normal <- bio_chem_trimmed_normal[c("lbxsatsi", "lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq020")]
+
+write.csv(bio_chem_trimmed_normal,"bio_chem_trimmed_chem_mental_normal.csv")
+
+```
+
+```{r}
+
+
+nrow(subset(bio_chem_trimmed_normal, dpq020 == "1"))
+nrow(subset(bio_chem_trimmed_normal, dpq020 == "0"))
+df_pos <- subset(bio_chem_trimmed_normal, dpq020 == "1")
+h_dat <- syn(df_pos, k = 11000, method = "parametric", seed = 1)
+write.syn(h_dat,file = "df_train_pos_syn_normal.csv", filetype = "csv")
+```
+##major
+
+
+
+
+
+```{r}
+bio_chem_trimmed_heavyl <- bio_chem_trimmed
+bio_chem_trimmed_heavyl <- subset(bio_chem_trimmed_heavyl, dpq020 != ".")
+bio_chem_trimmed_heavyl <- subset(bio_chem_trimmed_heavyl, dpq020 != "7")
+bio_chem_trimmed_heavyl <- subset(bio_chem_trimmed_heavyl, dpq020 != "9")
+bio_chem_trimmed_heavyl <- subset(bio_chem_trimmed_heavyl, dpq020 != "1")
+
+
+bio_chem_trimmed_heavyl$dpq020[bio_chem_trimmed_heavyl$dpq020 != 0] <- 1
+
+
+bio_chem_trimmed_heavyl <- bio_chem_trimmed_heavyl %>% drop_na()
+
+
+bio_chem_trimmed_heavyl <- bio_chem_trimmed_heavyl[c("lbxsatsi", "lbxsal","lbxscr", "lbxsgl" , "lbxsch" ,"lbxsir" ,"lbxstr", "lbxsapsi","lbxsassi","lbxsc3si","lbxsbu","lbxsclsi","lbxsck","lbxsgb","lbxsgtsi","lbxsldsi","lbxsossi","lbxsph","lbxsksi","lbxsnasi","lbxstb","lbxsca","lbxstp","lbxsua","dpq020")]
+head(bio_chem_trimmed_heavyl)
+
+
+
+
+write.csv(bio_chem_trimmed_heavyl,"bio_chem_trimmed_chem_mental_heavy.csv")
+
+
+
+
+```
+
+
+```{r}
+
+nrow(subset(bio_chem_trimmed_heavyl, dpq020 == "1"))
+nrow(subset(bio_chem_trimmed_heavyl, dpq020 == "0"))
+df_pos <- subset(bio_chem_trimmed_heavyl, dpq020 == "1")
+h_dat <- syn(df_pos, k = 12500, method = "parametric", seed = 1)
+write.syn(h_dat,file = "df_train_pos_syn_heavy.csv", filetype = "csv")
+
+```
